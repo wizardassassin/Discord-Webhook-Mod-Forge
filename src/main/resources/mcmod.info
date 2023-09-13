@@ -1,0 +1,16 @@
+[
+{
+  "modid": "discord-webhook-mod",
+  "name": "Discord Webhook Mod",
+  "description": "A Discord webhook mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["wizard_assassin"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
