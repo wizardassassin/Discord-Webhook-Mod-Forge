@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -52,7 +52,7 @@ public class ConnectionHandler {
         return ConnectionHandler.sendJson(urlString, jsonBody, false);
     }
 
-    public static String sendMultipart(String urlString, ArrayList<FormPart> formParts, boolean readResponse)
+    public static String sendMultipart(String urlString, Collection<FormPart> formParts, boolean readResponse)
             throws IOException {
         String boundary = String.format("---data-%08d", (long) (Math.random() * 1e8));
         String crlf = "\r\n";
@@ -93,7 +93,7 @@ public class ConnectionHandler {
         return response;
     }
 
-    public static String sendMultipart(String urlString, ArrayList<FormPart> formParts) throws IOException {
+    public static String sendMultipart(String urlString, Collection<FormPart> formParts) throws IOException {
         return ConnectionHandler.sendMultipart(urlString, formParts, false);
     }
 
