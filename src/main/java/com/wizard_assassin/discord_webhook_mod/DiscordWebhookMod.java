@@ -25,12 +25,14 @@ public class DiscordWebhookMod {
     public static Logger logger;
     public static DiscordWebhookSender webhook;
     public static ImageHandler avatars;
+    public static CustomConfig config;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
-        webhook = new DiscordWebhookSender("ADD_URL_HERE");
+        webhook = new DiscordWebhookSender(CustomConfig.url);
         avatars = new ImageHandler();
+        config = new CustomConfig();
         // webhook.sendStarting();
         logger.info("\033[0;32m STARTING \033[0m");
     }
