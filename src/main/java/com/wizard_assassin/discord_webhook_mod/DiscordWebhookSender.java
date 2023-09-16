@@ -104,10 +104,10 @@ public class DiscordWebhookSender {
                 new ImagePart(image, "files[0]", "image.png"));
     }
 
-    public void sendJoin(EntityPlayer player) {
+    public void sendJoin(EntityPlayer player, String playerCount) {
         BufferedImage avatar = DiscordWebhookMod.avatars.getAvatar(player, false);
         List<FormPart> parts = this.createParts(avatar);
-        this.setPlayer(player.getName() + " joined the server");
+        this.setPlayer(player.getName() + " joined the server (" + playerCount + ")");
         this.setColor(2067276);
         this.setTimestamp();
         try {
@@ -117,10 +117,10 @@ public class DiscordWebhookSender {
         }
     }
 
-    public void sendLeave(EntityPlayer player) {
+    public void sendLeave(EntityPlayer player, String playerCount) {
         BufferedImage avatar = DiscordWebhookMod.avatars.getAvatar(player, true);
         List<FormPart> parts = this.createParts(avatar);
-        this.setPlayer(player.getName() + " left the server");
+        this.setPlayer(player.getName() + " left the server (" + playerCount + ")");
         this.setColor(2067276);
         this.setTimestamp();
         try {

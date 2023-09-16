@@ -27,6 +27,7 @@ public class DiscordWebhookMod {
     public static ImageHandler avatars;
     public static CustomConfig config;
     public static Class<? extends DiscordWebhookMod> objClass;
+    public static String maxPlayers;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -51,7 +52,8 @@ public class DiscordWebhookMod {
         File serverIcon = Paths.get(server.getDataDirectory().toPath().toString(), "server-icon.png").toFile();
         String version = server.getMinecraftVersion();
         String motd = server.getMOTD();
-        String players = "" + server.getCurrentPlayerCount() + "/" + server.getMaxPlayers();
+        maxPlayers = "" + server.getMaxPlayers();
+        String players = "" + server.getCurrentPlayerCount() + "/" + maxPlayers;
         webhook.sendStarted(serverIcon, version, motd, players);
         logger.info("\033[0;32m STARTED \033[0m");
     }
