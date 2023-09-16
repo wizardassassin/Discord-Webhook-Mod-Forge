@@ -18,5 +18,6 @@ public class FilePart extends StreamPart {
     public void pipeFormData(OutputStream outStream) throws IOException {
         FileInputStream inputStream = new FileInputStream(this.file);
         ConnectionHandler.pipeStreams(inputStream, outStream);
+        inputStream.close();
     }
 }
