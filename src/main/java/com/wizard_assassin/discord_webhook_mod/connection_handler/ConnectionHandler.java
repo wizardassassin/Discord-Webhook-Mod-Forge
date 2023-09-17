@@ -105,6 +105,18 @@ public class ConnectionHandler {
         return ConnectionHandler.sendText(urlString, text, false);
     }
 
+    public static void ping(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        // HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.addRequestProperty("Accept", "application/json");
+        connection.addRequestProperty("User-Agent", ConnectionHandler.userAgent);
+        connection.connect();
+        InputStream inStream = connection.getInputStream();
+        inStream.close();
+        connection.disconnect();
+    }
+
     public static String getText(String urlString) throws IOException {
         URL url = new URL(urlString);
         // HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();

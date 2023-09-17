@@ -1,13 +1,37 @@
 package com.wizard_assassin.discord_webhook_mod;
 
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.Comment;
+import java.io.File;
 
-@Config(modid = DiscordWebhookMod.MODID)
+import net.minecraftforge.common.config.Configuration;
+
 public class CustomConfig {
-    @Comment({
-            "A Valid Discord Webhook URL",
-            "Server needs to be restarted for changes to take effect"
-    })
-    public static String url = "INSERT_VALID_URL_IN_CONFIG_FILE";
+    public String url;
+    private Configuration config;
+
+    public CustomConfig(File configFile) {
+        this.config = new Configuration(configFile);
+        this.url = null;
+        this.loadConfig();
+    }
+
+    public void loadConfig() {
+        boolean result = this.internalLoadConfig();
+        if (!result)
+            DiscordWebhookMod.logger.warn("The config file URL is still the same.");
+
+    }
+
+    public boolean internalLoadConfig() {
+        this.config.load();
+        String configUrl = this.config.getString("url", Configuration.CATEGORY_GENERAL,
+                "INSERT_URL_IN_CONFIG_FILE",
+                "A Valid Discord Webhook URL\nrun /updateDiscordWebhook (or restart the server)\nfor changes to take effect");
+        if (this.url != null && this.url.equals(configUrl)) {
+            this.config.save();
+            return false;
+        }
+        this.url = configUrl;
+        this.config.save();
+        return true;
+    }
 }

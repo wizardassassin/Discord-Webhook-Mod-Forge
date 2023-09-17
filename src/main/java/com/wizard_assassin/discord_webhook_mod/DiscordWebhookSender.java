@@ -24,18 +24,21 @@ public class DiscordWebhookSender {
     public static String avatarUrl = "";
 
     private String url;
+    private boolean validURL;
     private JsonObject jsonBody;
-    public JsonArray attachments;
-    public JsonObject embed;
-    public JsonObject author;
-    public JsonArray fields;
-    public JsonObject version;
-    public JsonObject motd;
-    public JsonObject players;
-    public JsonObject thumbnail;
+    private JsonArray attachments;
+    private JsonObject embed;
+    private JsonObject author;
+    private JsonArray fields;
+    private JsonObject version;
+    private JsonObject motd;
+    private JsonObject players;
+    private JsonObject thumbnail;
 
     public DiscordWebhookSender(String url) {
-        this.url = url;
+        this.url = null;
+        this.validURL = false;
+        this.updateURL(url);
         this.jsonBody = new JsonObject();
         JsonArray embeds = new JsonArray();
         this.embed = new JsonObject();
@@ -60,6 +63,28 @@ public class DiscordWebhookSender {
         this.fields.add(this.players);
         this.thumbnail = new JsonObject();
         this.thumbnail.addProperty("url", "attachment://image.png");
+    }
+
+    public void updateURL(String url) {
+        if (!url.startsWith("https://discord.com/api/webhooks/")) {
+            DiscordWebhookMod.logger
+                    .warn("(Missing Valid URL): Make sure to set the Discord webhook URL in the config file.");
+            return;
+        }
+        try {
+            ConnectionHandler.ping(url);
+        } catch (IOException e) {
+            DiscordWebhookMod.logger.error(e.toString());
+            DiscordWebhookMod.logger
+                    .error("(Can't Ping URL): Make sure the webhook is active and the URL is spelled correctly.");
+            return;
+        }
+        this.url = url;
+        this.validURL = true;
+    }
+
+    public boolean canSend() {
+        return this.validURL;
     }
 
     private void setStart(String title, String version, String motd, String players) {
@@ -105,6 +130,8 @@ public class DiscordWebhookSender {
     }
 
     public void sendJoin(EntityPlayer player, String playerCount) {
+        if (!this.validURL)
+            return;
         BufferedImage avatar = DiscordWebhookMod.avatars.getAvatar(player, false);
         List<FormPart> parts = this.createParts(avatar);
         this.setPlayer(player.getName() + " joined the server (" + playerCount + ")");
@@ -118,6 +145,8 @@ public class DiscordWebhookSender {
     }
 
     public void sendLeave(EntityPlayer player, String playerCount) {
+        if (!this.validURL)
+            return;
         BufferedImage avatar = DiscordWebhookMod.avatars.getAvatar(player, true);
         List<FormPart> parts = this.createParts(avatar);
         this.setPlayer(player.getName() + " left the server (" + playerCount + ")");
@@ -130,7 +159,9 @@ public class DiscordWebhookSender {
         }
     }
 
-    public void sendStarted(File icon, String version, String motd, String players) {
+    public void sendStarted(File icon, String version, String motd, String players, long startTime) {
+        if (!this.validURL)
+            return;
         BufferedImage serverIcon = ImageHandler.getServerIcon(icon);
         List<FormPart> parts = this.createParts(serverIcon);
         this.setStart("Minecraft Server has Started", version, motd, players);
@@ -143,7 +174,9 @@ public class DiscordWebhookSender {
         }
     }
 
-    public void sendStopped() {
+    public void sendStopped(long stopTime) {
+        if (!this.validURL)
+            return;
         this.setStop("Minecraft Server has Stopped");
         this.setColor(2123412);
         this.setTimestamp();
