@@ -11,12 +11,12 @@ import net.minecraft.server.MinecraftServer;
 public class ConfigReloader extends CommandBase {
     @Override
     public String getName() {
-        return "updateDiscordWebhook";
+        return "discordWebhookUpdate";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/updateDiscordWebhook";
+        return "/discordWebhookUpdate";
     }
 
     @Override
@@ -29,10 +29,17 @@ public class ConfigReloader extends CommandBase {
         String maxPlayers = "" + server.getMaxPlayers();
         String players = "" + server.getCurrentPlayerCount() + "/" + maxPlayers;
         DiscordWebhookMod.webhook.sendStarted(serverIcon, version, motd, players, DiscordWebhookMod.timeStore);
+        String msg = (DiscordWebhookMod.webhook.canSend()) ? "The webhook works now!" : "The webhook isn't working...";
+        CommandBase.notifyCommandListener(sender, this, msg);
     }
 
     @Override
     public int getRequiredPermissionLevel() {
         return 4;
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return super.checkPermission(server, sender);
     }
 }

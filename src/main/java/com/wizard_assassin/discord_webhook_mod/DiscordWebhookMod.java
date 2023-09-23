@@ -52,6 +52,7 @@ public class DiscordWebhookMod {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new ConfigReloader());
+        event.registerServerCommand(new DiscordWebhookStatus());
     }
 
     @EventHandler

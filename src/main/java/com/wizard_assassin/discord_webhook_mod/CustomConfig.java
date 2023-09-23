@@ -25,7 +25,7 @@ public class CustomConfig {
         this.config.load();
         String configUrl = this.config.getString("url", Configuration.CATEGORY_GENERAL,
                 "INSERT_URL_IN_CONFIG_FILE",
-                "A Valid Discord Webhook URL\nrun /updateDiscordWebhook (or restart the server)\nfor changes to take effect");
+                "A Valid Discord Webhook URL\nrun /discordWebhookUpdate (or restart the server)\nfor changes to take effect");
         if (this.url != null && this.url.equals(configUrl)) {
             this.config.save();
             return false;
